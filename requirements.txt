@@ -1,0 +1,4 @@
+aiohttp
+cryptography
+mashumaro
+yarl
