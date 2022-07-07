@@ -50,31 +50,49 @@ class CertificatesEndpoint(BaseApiEndpoint):
         resp = await self._transport.get(f'{self.URL_PATH}/{fingerprint}')
         return Certificate.from_dict(resp.metadata)
 
-    async def patch(
+    async def partial_update(
         self,
         fingerprint: str,
-        certificate: str,
-        name: str,
-        password: str,
-        projects: str,
-        restricted: bool,
-        token: bool,
-        type: str
+        certificate: str = None,
+        name: str = None,
+        projects: str = None,
+        restricted: bool = None,
+        type: str = None
     ) -> None:
-        pass
+        json = {}
+        if certificate is not None:
+            json['certificate'] = certificate
+        if name is not None:
+            json['name'] = name
+        if projects is not None:
+            json['projects'] = projects
+        if restricted is not None:
+            json['restricted'] = restricted
+        if type is not None:
+            json['type'] = type
+        await self._transport.patch(
+            f'{self.URL_PATH}/{fingerprint}', json=json
+        )
 
-    async def put(
+    async def update(
         self,
         fingerprint: str,
         certificate: str,
         name: str,
-        password: str,
         projects: str,
         restricted: bool,
-        token: bool,
         type: str
     ) -> None:
-        pass
+        await self._transport.put(
+            f'{self.URL_PATH}/{fingerprint}',
+            json={
+                'certificate': certificate,
+                'name': name,
+                'projects': projects,
+                'restricted': restricted,
+                'type': type
+            }
+        )
 
     async def delete(self, fingerprint: str) -> None:
         await self._transport.get(f'{self.URL_PATH}/{fingerprint}')

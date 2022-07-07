@@ -2,16 +2,16 @@ Async python client for `LXD REST API`_ (currently under heavy development).
 
 .. _LXD REST API: https://linuxcontainers.org/lxd/api/master/#/
 
+Usage
+-----
+
 Installation
-------------
+~~~~~~~~~~~~
 
 .. code-block:: shell
 
     pip install lxd
 
-
-Usage
------
 
 Initialize client
 ~~~~~~~~~~~~~~~~~
@@ -98,3 +98,10 @@ Instances
 * client.instances.delete
 * client.instances.get_state
 * client.instances.update_state
+
+Operations
+~~~~~~~~~~
+* client.operations.list
+* client.operations.get
+* client.operations.wait
+* client.operations.cancel
