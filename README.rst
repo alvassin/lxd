@@ -1,3 +1,7 @@
+Async python client for `LXD REST API`_.
+
+.. _LXD REST API: https://linuxcontainers.org/lxd/api/master/#/
+
 Installation
 ------------
 
