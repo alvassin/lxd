@@ -1,4 +1,4 @@
-Async python client for `LXD REST API`_.
+Async python client for `LXD REST API`_ (currently under heavy development).
 
 .. _LXD REST API: https://linuxcontainers.org/lxd/api/master/#/
 
@@ -69,3 +69,32 @@ Change instance state
     )
     await client.operations.wait(operation.id)  # wait as long as possible
     await client.operations.wait(operation.id, timeout=30)  # 30s
+
+
+Available Endpoints
+-------------------
+
+Server
+~~~~~~
+* client.server.get
+* client.server.get_resources
+* client.update_configuration
+* client.partial_update_configuration
+
+Certificates
+~~~~~~~~~~~~
+* client.certificates.list
+* client.certificates.add
+* client.certificates.get
+* client.certificates.update
+* client.certificates.partial_update
+* client.certificates.delete
+
+Instances
+~~~~~~~~~
+* client.instances.list
+* client.instances.get
+* client.instances.create
+* client.instances.delete
+* client.instances.get_state
+* client.instances.update_state

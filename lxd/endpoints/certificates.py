@@ -28,7 +28,7 @@ class CertificatesEndpoint(BaseApiEndpoint):
 
         return [Certificate.from_dict(item) for item in resp.metadata]
 
-    async def create(
+    async def add(
         self,
         cert_data: bytes,
         password: str,

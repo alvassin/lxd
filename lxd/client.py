@@ -29,7 +29,7 @@ class LXDClient:
         with open(cert_path.expanduser()) as f:
             cert = f.read().encode('utf-8')
 
-        await self.certificates.create(cert, password=password)
+        await self.certificates.add(cert, password=password)
 
 
 def lxd_client(
