@@ -29,5 +29,8 @@ devenv: clean
 	env/bin/pip install -Ue '.[dev]'
 	env/bin/pip check
 
+lint:
+	twine check --strict dist/*
+
 codestyle:
 	gray *.py lxd tests
