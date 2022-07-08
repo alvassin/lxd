@@ -116,3 +116,9 @@ Operations
 * client.operations.get
 * client.operations.wait
 * client.operations.cancel
+
+TODO
+----
+* Add `filtering support`_.
+
+.. _filtering support: https://linuxcontainers.org/lxd/docs/master/rest-api/#filtering
