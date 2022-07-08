@@ -1,3 +1,4 @@
 gray
+pylama
 pytest
 twine
