@@ -9,8 +9,18 @@ from lxd.entities.server import Server, ServerResources, Event
 class ServerEndpoint(BaseApiEndpoint):
     URL_PATH = '/1.0'
 
-    async def get(self) -> Server:
-        resp_content = await self._transport.get(self.URL_PATH)
+    async def get(
+        self,
+        target: Optional[str] = None,
+        project: Optional[str] = None
+    ) -> Server:
+        params = {}
+        if target is not None:
+            params['target'] = target
+        if project is not None:
+            params['project'] = project
+
+        resp_content = await self._transport.get(self.URL_PATH, params=params)
         return Server.from_dict(resp_content.metadata)
 
     async def get_resources(self) -> ServerResources:
@@ -18,10 +28,16 @@ class ServerEndpoint(BaseApiEndpoint):
         return ServerResources.from_dict(resp_content.metadata)
 
     async def update_configuration_subset(self, config: Mapping[str, Any]):
-        await self._transport.patch(self.URL_PATH, json=config)
+        # Convert all values to string, otherwise server fails silently when
+        # sending integers or float
+        json = {'config': {k: str(v) for k, v in config.items()}}
+        await self._transport.patch(self.URL_PATH, json=json)
 
     async def update_configuration(self, config: Mapping[str, Any]):
-        await self._transport.put(self.URL_PATH, json=config)
+        # Convert all values to string, otherwise server fails silently when
+        # sending integers or float
+        json = {'config': {k: str(v) for k, v in config.items()}}
+        await self._transport.put(self.URL_PATH, json=json)
 
     async def get_events(
         self,
