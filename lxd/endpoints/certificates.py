@@ -56,7 +56,7 @@ class CertificatesEndpoint(BaseApiEndpoint):
         resp = await self._transport.get(f'{self.URL_PATH}/{fingerprint}')
         return Certificate.from_dict(resp.metadata)
 
-    async def partial_update(
+    async def update_configuration_subset(
         self,
         fingerprint: str,
         certificate: str = None,
@@ -80,7 +80,7 @@ class CertificatesEndpoint(BaseApiEndpoint):
             f'{self.URL_PATH}/{fingerprint}', json=json
         )
 
-    async def update(
+    async def update_configuration(
         self,
         fingerprint: str,
         certificate: str,

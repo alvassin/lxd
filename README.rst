@@ -183,12 +183,13 @@ request is performed for every await call).
     certs = await asyncio.gather(*cert_links)
 
 
-client.certificates.get
+certificates.get
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Gets a specific certificate entry from the trust store by fingerprint.
 
 .. code-block:: python
+
     from cryptography.x509 import load_pem_x509_certificate
     from cryptography.hazmat.primitives import hashes
 
@@ -199,7 +200,7 @@ Gets a specific certificate entry from the trust store by fingerprint.
     assert cert_obj.fingerprint(hashes.SHA256()).hex() == fprint
 
 
-client.certificates.add
+certificates.add
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Adds a certificate to the trust store as trusted user (client certificate
@@ -254,13 +255,29 @@ as an untrusted user.
     )
 
 
-client.certificates.update
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+certificates.update_configuration
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-client.certificates.partial_update
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Update the entire certificate configuration.
 
-client.certificates.remove
+.. code-block:: python
+
+    await client.certificates.update_configuration(
+        '97f267c0fe20fd013b6b4ba3f5440ea3e9361ce8568d41c633f28c620ab37ea0',
+    )
+
+certificates.update_configuration_subset
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Update a subset of the certificate configuration.
+
+.. code-block:: python
+
+    await client.certificates.update_configuration_subset(
+        '97f267c0fe20fd013b6b4ba3f5440ea3e9361ce8568d41c633f28c620ab37ea0',
+    )
+
+certificates.remove
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Removes the certificate from the trust store.
