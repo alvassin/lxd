@@ -71,6 +71,16 @@ Change instance state
     await client.operations.wait(operation.id, timeout=30)  # 30s
 
 
+Get event stream
+~~~~~~~~~~~~~~~~
+.. code-block:: python
+
+    async for event in client.server.get_events():
+        # See Event object for more properties
+        print(event.type)
+        print(event.metadata)
+
+
 Available Endpoints
 -------------------
 
@@ -78,6 +88,7 @@ Server
 ~~~~~~
 * client.server.get
 * client.server.get_resources
+* client.server.get_events
 * client.update_configuration
 * client.partial_update_configuration
 

@@ -1,9 +1,11 @@
 from dataclasses import dataclass, field
+from datetime import datetime
 from typing import Mapping
 
 from mashumaro import field_options
 
 from lxd.entities.base import BaseEntity, EntityLink
+from lxd.utils import parse_datetime_with_nanoseconds
 
 
 @dataclass(frozen=True)
@@ -18,8 +20,12 @@ class Operation(BaseEntity):
     resources: Mapping
     status: str
     status_code: int
-    created_at: str
-    updated_at: str
+    created_at: datetime = field(metadata={
+        "deserialize": parse_datetime_with_nanoseconds
+    })
+    updated_at: datetime = field(metadata={
+        "deserialize": parse_datetime_with_nanoseconds
+    })
 
 
 class OperationLink(EntityLink):

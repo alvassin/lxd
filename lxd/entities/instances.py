@@ -1,9 +1,10 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any, List, Mapping, Optional
 
 from lxd.entities.base import BaseEntity, EntityLink
+from lxd.utils import parse_datetime_with_nanoseconds
 
 
 @dataclass(frozen=True)
@@ -63,11 +64,15 @@ class Instance(BaseInstance):
     status_code: int
     project: str
     profiles: List[str]
-    created_at: str
     expanded_config: Mapping[str, Any]
     expanded_devices: Mapping[str, Any]
-    last_used_at: str
     location: str
+    created_at: datetime = field(metadata={
+        "deserialize": parse_datetime_with_nanoseconds
+    })
+    last_used_at: datetime = field(metadata={
+        "deserialize": parse_datetime_with_nanoseconds
+    })
     backups: Optional[List[InstanceBackup]] = None
     snapshots: Optional[List[InstanceSnapshot]] = None
     state: Optional[InstanceState] = None

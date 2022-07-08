@@ -1,8 +1,10 @@
+from datetime import datetime, timezone
+
 from lxd.entities.operations import Operation
 
 
 def test_create_operation():
-    raw_operation = {
+    operation = Operation.from_dict({
        'id': '195fdb8d-b74b-4baa-a977-c1da8a7570ad',
        'class': 'task',
        'description': 'Stopping instance',
@@ -17,5 +19,10 @@ def test_create_operation():
        'may_cancel': False,
        'err': '',
        'location': 'none'
-    }
-    Operation.from_dict(raw_operation)
+    })
+    assert operation.created_at == datetime(
+        2022, 7, 1, 20, 9, 18, 699628, timezone.utc
+    )
+    assert operation.updated_at == datetime(
+        2022, 7, 1, 20, 9, 18, 699628, timezone.utc
+    )

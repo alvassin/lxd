@@ -1,7 +1,9 @@
-from typing import Any, Callable, Mapping
+from typing import Any, Mapping
+
+from aiohttp import WSMessage
 
 from lxd.endpoints.base import BaseApiEndpoint
-from lxd.entities.server import Server, ServerResources
+from lxd.entities.server import Server, ServerResources, Event
 
 
 class ServerEndpoint(BaseApiEndpoint):
@@ -24,7 +26,7 @@ class ServerEndpoint(BaseApiEndpoint):
     async def update_configuration(self, config: Mapping[str, Any]):
         await self._transport.put(self.URL_PATH, json=config)
 
-    async def register_event_handler(self, callback: Callable):
+    async def get_events(self):
         async with self._transport.session.ws_connect('/1.0/events') as ws:
-            async for msg in ws:
-                await callback(msg)
+            async for msg in ws:  # type: WSMessage
+                yield Event.from_dict(msg.json())
