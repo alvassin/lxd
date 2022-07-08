@@ -13,8 +13,9 @@ $(PROJECT_NAME)/version.py:
 
 bump: clean $(PROJECT_NAME)/version.py
 
-sdist: bump
+build: bump
 	python3 setup.py sdist
+	twine check --strict dist/*
 
 clean:
 	rm -fr *.egg-info .tox dist $(PROJECT_NAME)/version.py
@@ -30,7 +31,7 @@ devenv: clean
 	env/bin/pip check
 
 lint:
-	twine check --strict dist/*
+	pylama .
 
 codestyle:
 	gray *.py lxd tests
