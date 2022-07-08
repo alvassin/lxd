@@ -184,7 +184,7 @@ request is performed for every await call).
 
 
 certificates.get
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
 
 Gets a specific certificate entry from the trust store by fingerprint.
 
@@ -201,7 +201,7 @@ Gets a specific certificate entry from the trust store by fingerprint.
 
 
 certificates.add
-~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~
 
 Adds a certificate to the trust store as trusted user (client certificate
 should be trusted).
@@ -256,7 +256,7 @@ as an untrusted user.
 
 
 certificates.update_configuration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Update the entire certificate configuration.
 
@@ -264,10 +264,16 @@ Update the entire certificate configuration.
 
     await client.certificates.update_configuration(
         '97f267c0fe20fd013b6b4ba3f5440ea3e9361ce8568d41c633f28c620ab37ea0',
+        certificate='-----BEGIN CERTIFICATE-----\n...',
+        name='new-name',
+        projects=[],
+        restricted=False,
+        type='client'
     )
 
+
 certificates.update_configuration_subset
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Update a subset of the certificate configuration.
 
@@ -275,10 +281,11 @@ Update a subset of the certificate configuration.
 
     await client.certificates.update_configuration_subset(
         '97f267c0fe20fd013b6b4ba3f5440ea3e9361ce8568d41c633f28c620ab37ea0',
+        name='another-name'
     )
 
 certificates.remove
-~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
 
 Removes the certificate from the trust store.
 
