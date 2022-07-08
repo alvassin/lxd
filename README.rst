@@ -93,8 +93,8 @@ Get server environment and configuration. `Swagger <https://linuxcontainers.org/
 
 .. code-block:: python
 
+    # See lxd.entities.server.Server
     info = await client.server.get()
-    # see lxd.entities.server.Server for all props
     print(info.config)
     print(info.environment)
 
@@ -105,14 +105,15 @@ Gets the hardware information profile of the LXD server. `Swagger <https://linux
 
 .. code-block:: python
 
-    info = await client.server.get_resources()
-    # see lxd.entities.server.Server for all props
-    print(info.config)
-    print(info.environment)
+    # See lxd.entities.server.ServerResources
+    server_resources = await client.server.get_resources()
+    print(server_resources.cpu)
+
 
 update_configuration
 ~~~~~~~~~~~~~~~~~~~~
-Update the entire server configuration. `Swagger <https://linuxcontainers.org/lxd/api/master/#/server/server_put>`_.
+Update the entire `server configuration <https://linuxcontainers.org/lxd/docs/master/server/>`_.
+`Swagger <https://linuxcontainers.org/lxd/api/master/#/server/server_put>`_.
 
 .. code-block:: python
 
@@ -124,7 +125,8 @@ Update the entire server configuration. `Swagger <https://linuxcontainers.org/lx
 
 update_configuration_subset
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Update a subset of the server configuration. `Swagger <https://linuxcontainers.org/lxd/api/master/#/server/server_patch>`_.
+Update a subset of the `server configuration <https://linuxcontainers.org/lxd/docs/master/server/>`_.
+`Swagger <https://linuxcontainers.org/lxd/api/master/#/server/server_patch>`_.
 
 .. code-block:: python
 
