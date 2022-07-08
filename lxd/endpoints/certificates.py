@@ -30,17 +30,14 @@ class CertificatesEndpoint(BaseApiEndpoint):
 
     async def add(
         self,
-        certificate: bytes,
+        certificate: Union[str, bytes],
         type: str = 'client',
         name: Optional[str] = None,
         restricted: bool = False,
         projects: Optional[List[str]] = None,
         password: Optional[str] = None
     ):
-        certificate = certificate.decode('utf-8')
-        certificate = '\n'.join(certificate.split('\n')[1:-2])
-
-        json = {'certificate': certificate, 'type': type}
+        json = {'certificate': str(certificate), 'type': type}
         if name is not None:
             json['name'] = name
         if restricted:
@@ -59,7 +56,7 @@ class CertificatesEndpoint(BaseApiEndpoint):
     async def update_configuration_subset(
         self,
         fingerprint: str,
-        certificate: str = None,
+        certificate: Optional[Union[str, bytes]] = None,
         name: str = None,
         projects: str = None,
         restricted: bool = None,
@@ -76,6 +73,7 @@ class CertificatesEndpoint(BaseApiEndpoint):
             json['restricted'] = restricted
         if type is not None:
             json['type'] = type
+
         await self._transport.patch(
             f'{self.URL_PATH}/{fingerprint}', json=json
         )
@@ -83,22 +81,20 @@ class CertificatesEndpoint(BaseApiEndpoint):
     async def update_configuration(
         self,
         fingerprint: str,
-        certificate: str,
+        certificate: Union[str, bytes],
         name: str,
         projects: str,
         restricted: bool,
         type: str
     ) -> None:
-        await self._transport.put(
-            f'{self.URL_PATH}/{fingerprint}',
-            json={
-                'certificate': certificate,
-                'name': name,
-                'projects': projects,
-                'restricted': restricted,
-                'type': type
-            }
-        )
+        json = {
+            'certificate': str(certificate),
+            'name': name,
+            'projects': projects,
+            'restricted': restricted,
+            'type': type
+        }
+        await self._transport.put(f'{self.URL_PATH}/{fingerprint}', json=json)
 
     async def remove(self, fingerprint: str) -> None:
         await self._transport.get(f'{self.URL_PATH}/{fingerprint}')
