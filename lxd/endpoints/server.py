@@ -20,7 +20,7 @@ class ServerEndpoint(BaseApiEndpoint):
         resp_content = await self._transport.get(f'{self.URL_PATH}/resources')
         return ServerResources.from_dict(resp_content.metadata)
 
-    async def partially_update_configuration(self, config: Mapping[str, Any]):
+    async def update_configuration_subset(self, config: Mapping[str, Any]):
         await self._transport.patch(self.URL_PATH, json=config)
 
     async def update_configuration(self, config: Mapping[str, Any]):

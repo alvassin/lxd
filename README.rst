@@ -90,7 +90,7 @@ Server
 * client.server.get_resources
 * client.server.get_events
 * client.update_configuration
-* client.partial_update_configuration
+* client.update_configuration_subset
 
 Certificates
 ~~~~~~~~~~~~
