@@ -92,7 +92,7 @@ Server
 
 server.get
 ~~~~~~~~~~
-Get server environment and configuration. `Swagger <https://linuxcontainers.org/lxd/api/master/#/server/server_get>`_.
+Get server environment and configuration.
 
 .. code-block:: python
 
@@ -105,7 +105,6 @@ Get server environment and configuration. `Swagger <https://linuxcontainers.org/
 server.update_configuration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Update the entire `server configuration <https://linuxcontainers.org/lxd/docs/master/server/>`_.
-`Swagger <https://linuxcontainers.org/lxd/api/master/#/server/server_put>`_.
 
 .. code-block:: python
 
@@ -118,7 +117,6 @@ Update the entire `server configuration <https://linuxcontainers.org/lxd/docs/ma
 server.update_configuration_subset
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Update a subset of the `server configuration <https://linuxcontainers.org/lxd/docs/master/server/>`_.
-`Swagger <https://linuxcontainers.org/lxd/api/master/#/server/server_patch>`_.
 
 .. code-block:: python
 
@@ -129,7 +127,7 @@ Update a subset of the `server configuration <https://linuxcontainers.org/lxd/do
 
 server.get_resources
 ~~~~~~~~~~~~~~~~~~~~
-Gets the hardware information profile of the LXD server. `Swagger <https://linuxcontainers.org/lxd/api/master/#/server/server_get>`_.
+Gets the hardware information profile of the LXD server.
 
 .. code-block:: python
 
@@ -141,7 +139,7 @@ Gets the hardware information profile of the LXD server. `Swagger <https://linux
 server.get_events
 ~~~~~~~~~~~~~~~~~
 Connect to `event API <https://linuxcontainers.org/lxd/docs/master/events/>`_
-using websocket. `Swagger <https://linuxcontainers.org/lxd/api/master/#/server/events_get>`_.
+using websocket.
 
 .. code-block:: python
 
