@@ -91,7 +91,7 @@ Server
 ------
 
 server.get
-~~~~~~~~~~~~~~~~~
+~~~~~~~~~~
 Get server environment and configuration. `Swagger <https://linuxcontainers.org/lxd/api/master/#/server/server_get>`_.
 
 .. code-block:: python
@@ -103,7 +103,7 @@ Get server environment and configuration. `Swagger <https://linuxcontainers.org/
 
 
 server.update_configuration
-~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Update the entire `server configuration <https://linuxcontainers.org/lxd/docs/master/server/>`_.
 `Swagger <https://linuxcontainers.org/lxd/api/master/#/server/server_put>`_.
 
@@ -116,7 +116,7 @@ Update the entire `server configuration <https://linuxcontainers.org/lxd/docs/ma
 
 
 server.update_configuration_subset
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Update a subset of the `server configuration <https://linuxcontainers.org/lxd/docs/master/server/>`_.
 `Swagger <https://linuxcontainers.org/lxd/api/master/#/server/server_patch>`_.
 
@@ -128,7 +128,7 @@ Update a subset of the `server configuration <https://linuxcontainers.org/lxd/do
 
 
 server.get_resources
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
 Gets the hardware information profile of the LXD server. `Swagger <https://linuxcontainers.org/lxd/api/master/#/server/server_get>`_.
 
 .. code-block:: python
