@@ -9,11 +9,8 @@ from lxd.entities.server import Server, ServerResources, Event
 class ServerEndpoint(BaseApiEndpoint):
     URL_PATH = '/1.0'
 
-    async def get(self, public: bool = False) -> Server:
-        params = {}
-        if public:
-            params['public'] = True
-        resp_content = await self._transport.get(self.URL_PATH, params=params)
+    async def get(self) -> Server:
+        resp_content = await self._transport.get(self.URL_PATH)
         return Server.from_dict(resp_content.metadata)
 
     async def get_resources(self) -> ServerResources:
