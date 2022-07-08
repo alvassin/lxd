@@ -1,5 +1,5 @@
 import binascii
-from typing import List, Union
+from typing import List, Union, Optional
 
 from cryptography import x509
 from cryptography.hazmat.backends import default_backend
@@ -30,21 +30,27 @@ class CertificatesEndpoint(BaseApiEndpoint):
 
     async def add(
         self,
-        cert_data: bytes,
-        password: str,
-        type: str = 'client'
-    ) -> CertificateLink:
-        cert = x509.load_pem_x509_certificate(cert_data, default_backend())
-        base64_cert = cert.public_bytes(Encoding.PEM).decode('utf-8')
-        base64_cert = '\n'.join(base64_cert.split('\n')[1:-2])
+        certificate: bytes,
+        type: str = 'client',
+        name: Optional[str] = None,
+        restricted: bool = False,
+        projects: Optional[List[str]] = None,
+        password: Optional[str] = None
+    ):
+        certificate = certificate.decode('utf-8')
+        certificate = '\n'.join(certificate.split('\n')[1:-2])
 
-        data = {'certificate': base64_cert, 'type': type, 'password': password}
-        await self._transport.post(self.URL_PATH, json=data)
-        fingerprint = binascii.hexlify(
-            cert.fingerprint(hashes.SHA256())).decode(
-            'utf-8'
-        )
-        return CertificateLink(endpoint=self, fingerprint=fingerprint)
+        json = {'certificate': certificate, 'type': type}
+        if name is not None:
+            json['name'] = name
+        if restricted:
+            json['restricted'] = restricted
+        if projects:
+            json['projects'] = projects
+        if password:
+            json['password'] = password
+
+        await self._transport.post(self.URL_PATH, json=json)
 
     async def get(self, fingerprint: str) -> Certificate:
         resp = await self._transport.get(f'{self.URL_PATH}/{fingerprint}')
@@ -94,5 +100,5 @@ class CertificatesEndpoint(BaseApiEndpoint):
             }
         )
 
-    async def delete(self, fingerprint: str) -> None:
+    async def remove(self, fingerprint: str) -> None:
         await self._transport.get(f'{self.URL_PATH}/{fingerprint}')

@@ -2,6 +2,9 @@ Async python client for `LXD REST API`_ (currently under heavy development).
 
 .. _LXD REST API: https://linuxcontainers.org/lxd/api/master/#/
 
+.. contents::
+
+
 Usage
 =====
 
@@ -99,18 +102,7 @@ Get server environment and configuration. `Swagger <https://linuxcontainers.org/
     print(info.environment)
 
 
-server.get_resources
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Gets the hardware information profile of the LXD server. `Swagger <https://linuxcontainers.org/lxd/api/master/#/server/server_get>`_.
-
-.. code-block:: python
-
-    # See lxd.entities.server.ServerResources
-    server_resources = await client.server.get_resources()
-    print(server_resources.cpu)
-
-
-update_configuration
+server.update_configuration
 ~~~~~~~~~~~~~~~~~~~~
 Update the entire `server configuration <https://linuxcontainers.org/lxd/docs/master/server/>`_.
 `Swagger <https://linuxcontainers.org/lxd/api/master/#/server/server_put>`_.
@@ -123,7 +115,7 @@ Update the entire `server configuration <https://linuxcontainers.org/lxd/docs/ma
     })
 
 
-update_configuration_subset
+server.update_configuration_subset
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Update a subset of the `server configuration <https://linuxcontainers.org/lxd/docs/master/server/>`_.
 `Swagger <https://linuxcontainers.org/lxd/api/master/#/server/server_patch>`_.
@@ -135,6 +127,17 @@ Update a subset of the `server configuration <https://linuxcontainers.org/lxd/do
     })
 
 
+server.get_resources
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Gets the hardware information profile of the LXD server. `Swagger <https://linuxcontainers.org/lxd/api/master/#/server/server_get>`_.
+
+.. code-block:: python
+
+    # See lxd.entities.server.ServerResources
+    server_resources = await client.server.get_resources()
+    print(server_resources.cpu)
+
+
 server.get_events
 ~~~~~~~~~~~~~~~~~
 Connect to `event API <https://linuxcontainers.org/lxd/docs/master/events/>`_
@@ -142,20 +145,132 @@ using websocket. `Swagger <https://linuxcontainers.org/lxd/api/master/#/server/e
 
 .. code-block:: python
 
-    info = await client.server.get_resources()
-    # see lxd.entities.server.Server for all props
-    print(info.config)
-    print(info.environment)
+    # Listen all events
+    async for event in client.server.get_events():
+        print(event.type)
+        print(event.metadata)
+
+    # Listen to specific events
+    async for event in client.server.get_events(type='operation'):
+        print(event.metadata.id)
+        print(event.metadata.status)
 
 
 Certificates
 ------------
-* client.certificates.list
-* client.certificates.add
-* client.certificates.get
-* client.certificates.update
-* client.certificates.partial_update
-* client.certificates.delete
+certificates.list
+~~~~~~~~~~~~~~~~~
+
+Returns a list of trusted certificates.
+
+.. code-block:: python
+
+    # See lxd.entities.certificates.Certificate
+    certs = await client.certificates.list()
+    print(certs[0].fingerprint)
+
+
+If you pass ``recursion=0`` parameter, lxd would return just references,
+which are represented in current module as
+``lxd.entities.certificates.CertificateLink`` objects.
+
+If you ``await`` such link object - you would get object itself (separate http
+request is performed for every await call).
+
+.. code-block:: python
+
+    cert_links = await client.certificates.list(recursion=0)
+    certs = await asyncio.gather(*cert_links)
+
+
+client.certificates.get
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Gets a specific certificate entry from the trust store by fingerprint.
+
+.. code-block:: python
+    from cryptography.x509 import load_pem_x509_certificate
+    from cryptography.hazmat.primitives import hashes
+
+    fprint = '97f267c0fe20fd013b6b4ba3f5440ea3e9361ce8568d41c633f28c620ab37ea0'
+    cert = await client.certificates.get(fprint)
+
+    cert_obj = load_pem_x509_certificate(cert.certificate.encode())
+    assert cert_obj.fingerprint(hashes.SHA256()).hex() == fprint
+
+
+client.certificates.add
+~~~~~~~~~~~~~~~~~~~~~~~
+
+Adds a certificate to the trust store as trusted user (client certificate
+should be trusted).
+
+.. code-block:: python
+
+    from cryptography import x509
+    from cryptography.x509.oid import NameOID
+    from cryptography.hazmat.backends import default_backend
+    from cryptography.hazmat.primitives import hashes, serialization
+    from cryptography.hazmat.primitives.asymmetric import rsa
+
+    private_key = rsa.generate_private_key(
+        public_exponent=65537, key_size=2048, backend=default_backend()
+    )
+    subj = x509.Name([
+        x509.NameAttribute(NameOID.COMMON_NAME, "alvassin@osx")
+    ])
+
+    cert = x509.CertificateBuilder().subject_name(
+        subj
+    ).issuer_name(
+        subj
+    ).public_key(
+        private_key.public_key()
+    ).serial_number(
+        x509.random_serial_number()
+    ).not_valid_before(
+        datetime.utcnow()
+    ).not_valid_after(
+        datetime.utcnow() + timedelta(days=365)
+    ).sign(
+        private_key=private_key,
+        algorithm=hashes.SHA256(),
+        backend=default_backend()
+    )
+
+    await client.certificates.add(
+        cert.public_bytes(serialization.Encoding.PEM)
+    )
+
+
+If ``password`` argument is specified, adds a certificate to the trust store
+as an untrusted user.
+
+.. code-block:: python
+
+    await client.certificates.add(
+        cert.public_bytes(serialization.Encoding.PEM),
+        password='your-trust-password'
+    )
+
+
+client.certificates.update
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+client.certificates.partial_update
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+client.certificates.remove
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Removes the certificate from the trust store.
+
+.. code-block:: python
+
+    await client.certificates.remove(
+        '97f267c0fe20fd013b6b4ba3f5440ea3e9361ce8568d41c633f28c620ab37ea0'
+    )
+
 
 Instances
 ---------

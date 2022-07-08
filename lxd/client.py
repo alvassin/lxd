@@ -26,9 +26,8 @@ class LXDClient:
         if server_info.auth == 'trusted':
             return
 
-        with open(cert_path.expanduser()) as f:
-            cert = f.read().encode('utf-8')
-
+        with open(cert_path.expanduser(), 'rb') as f:
+            cert = f.read()
         await self.certificates.add(cert, password=password)
 
 

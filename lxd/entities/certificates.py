@@ -6,6 +6,7 @@ from lxd.entities.base import BaseEntity, EntityLink
 
 @dataclass(frozen=True)
 class Certificate(BaseEntity):
+    certificate: str
     fingerprint: str
     name: str
     projects: List[str]
