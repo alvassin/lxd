@@ -3,10 +3,10 @@ Async python client for `LXD REST API`_ (currently under heavy development).
 .. _LXD REST API: https://linuxcontainers.org/lxd/api/master/#/
 
 Usage
------
+=====
 
 Installation
-~~~~~~~~~~~~
+------------
 
 .. code-block:: shell
 
@@ -14,7 +14,7 @@ Installation
 
 
 Initialize client
-~~~~~~~~~~~~~~~~~
+-----------------
 .. code-block:: python
 
     import asyncio
@@ -42,7 +42,7 @@ Initialize client
     asyncio.run(main())
 
 Example usages
-~~~~~~~~~~~~~~
+--------------
 .. code-block:: python
 
     # Recursion 0 returns only links to objects,
@@ -58,7 +58,7 @@ Example usages
 
 
 Change instance state
-~~~~~~~~~~~~~~~~~~~~~
+---------------------
 .. code-block:: python
 
     from lxd.entities.instances import InstanceAction
@@ -72,7 +72,7 @@ Change instance state
 
 
 Get event stream
-~~~~~~~~~~~~~~~~
+----------------
 .. code-block:: python
 
     async for event in client.server.get_events():
@@ -82,18 +82,72 @@ Get event stream
 
 
 Available Endpoints
--------------------
+===================
 
 Server
-~~~~~~
-* client.server.get
-* client.server.get_resources
-* client.server.get_events
-* client.update_configuration
-* client.update_configuration_subset
+------
+
+server.get
+~~~~~~~~~~~~~~~~~
+Get server environment and configuration. `Swagger <https://linuxcontainers.org/lxd/api/master/#/server/server_get>`_.
+
+.. code-block:: python
+
+    info = await client.server.get()
+    # see lxd.entities.server.Server for all props
+    print(info.config)
+    print(info.environment)
+
+
+server.get_resources
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Gets the hardware information profile of the LXD server. `Swagger <https://linuxcontainers.org/lxd/api/master/#/server/server_get>`_.
+
+.. code-block:: python
+
+    info = await client.server.get_resources()
+    # see lxd.entities.server.Server for all props
+    print(info.config)
+    print(info.environment)
+
+update_configuration
+~~~~~~~~~~~~~~~~~~~~
+Update the entire server configuration. `Swagger <https://linuxcontainers.org/lxd/api/master/#/server/server_put>`_.
+
+.. code-block:: python
+
+    await client.server.update_configuration({
+        'core.https_address': '0.0.0.0:8443'
+        'core.trust_password': 'very-strong-password'
+    })
+
+
+update_configuration_subset
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Update a subset of the server configuration. `Swagger <https://linuxcontainers.org/lxd/api/master/#/server/server_patch>`_.
+
+.. code-block:: python
+
+    await client.server.update_configuration_subset({
+        'images.remote_cache_expiry': 2
+    })
+
+
+server.get_events
+~~~~~~~~~~~~~~~~~
+Connect to `event API <https://linuxcontainers.org/lxd/docs/master/events/>`_
+using websocket. `Swagger <https://linuxcontainers.org/lxd/api/master/#/server/events_get>`_.
+
+.. code-block:: python
+
+    info = await client.server.get_resources()
+    # see lxd.entities.server.Server for all props
+    print(info.config)
+    print(info.environment)
+
 
 Certificates
-~~~~~~~~~~~~
+------------
 * client.certificates.list
 * client.certificates.add
 * client.certificates.get
@@ -102,7 +156,7 @@ Certificates
 * client.certificates.delete
 
 Instances
-~~~~~~~~~
+---------
 * client.instances.list
 * client.instances.get
 * client.instances.create
@@ -111,14 +165,14 @@ Instances
 * client.instances.update_state
 
 Operations
-~~~~~~~~~~
+----------
 * client.operations.list
 * client.operations.get
 * client.operations.wait
 * client.operations.cancel
 
 TODO
-----
+====
 * Add `filtering support`_.
 
 .. _filtering support: https://linuxcontainers.org/lxd/docs/master/rest-api/#filtering
