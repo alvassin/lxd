@@ -24,6 +24,7 @@ setup(
     license=module.__license__,
     description=module.__doc__,
     long_description=open('README.rst').read(),
+    long_description_content_type='text/x-rst',
     platforms='all',
     classifiers=[
         'Intended Audience :: Developers',
