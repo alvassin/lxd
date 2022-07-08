@@ -53,5 +53,6 @@ class ServerEndpoint(BaseApiEndpoint):
         async with self._transport.session.ws_connect(
             f'{self.URL_PATH}/events', params=params
         ) as ws:
-            async for msg in ws:  # type: WSMessage
+            msg: WSMessage
+            async for msg in ws:
                 yield Event.from_dict(msg.json())

@@ -16,6 +16,7 @@ def load_requirements(fname) -> list:
     with open(fname) as fp:
         return [str(req) for req in parse_requirements(fp.read())]
 
+
 setup(
     name=module_name.replace('_', '-'),
     version=module.__version__,

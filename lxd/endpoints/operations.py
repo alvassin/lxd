@@ -1,3 +1,5 @@
+from typing import List, Union
+
 from lxd.endpoints.base import BaseApiEndpoint
 from lxd.entities.operations import Operation, OperationLink
 
@@ -5,7 +7,10 @@ from lxd.entities.operations import Operation, OperationLink
 class OperationsEndpoint(BaseApiEndpoint):
     URL_PATH = '/1.0/operations'
 
-    async def list(self, recursion: int = 0):
+    async def list(
+        self,
+        recursion: int = 0
+    ) -> Union[List[Operation], List[OperationLink]]:
         resp = await self._transport.get(
             self.URL_PATH, params={'recursion': recursion}
         )
