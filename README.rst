@@ -296,19 +296,65 @@ Removes the certificate from the trust store.
 
 Instances
 ---------
-* client.instances.list
-* client.instances.get
-* client.instances.create
-* client.instances.delete
-* client.instances.get_state
-* client.instances.update_state
+instances.list
+~~~~~~~~~~~~~~
+
+Get instances list.
+
+instances.get
+~~~~~~~~~~~~~
+
+Get a specific instance (basic struct).
+
+instances.create
+~~~~~~~~~~~~~~~~
+
+Create a new instance on LXD.
+
+Depending on the source, this can create an instance from an existing
+local image, remote image, existing local instance or snapshot, remote
+migration stream or backup file.
+
+instances.delete
+~~~~~~~~~~~~~~~~
+
+Deletes a specific instance and anything owned by the instance,
+such as snapshots and backups.
+
+instances.get_state
+~~~~~~~~~~~~~~~~~~~
+
+Gets the runtime state of the instance.
+
+This is a reasonably expensive call as it causes code to be run
+inside of the instance to retrieve the resource usage and network
+information.
+
+instances.update_state
+~~~~~~~~~~~~~~~~~~~~~~
+
+Changes the running state of the instance.
 
 Operations
 ----------
-* client.operations.list
-* client.operations.get
-* client.operations.wait
-* client.operations.cancel
+operations.list
+~~~~~~~~~~~~~~~
+Get a list of operations.
+
+operations.get
+~~~~~~~~~~~~~~
+Get specific operation state.
+
+operations.wait
+~~~~~~~~~~~~~~~
+
+Wait for the operation to reach a final state (or timeout)
+and retrieve its final state.
+
+operations.cancel
+~~~~~~~~~~~~~~~~~
+
+Cancel the operation (if supported by operation).
 
 TODO
 ====
