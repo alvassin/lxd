@@ -1,4 +1,4 @@
-from typing import Any, Mapping
+from typing import Any, Mapping, Optional
 
 from aiohttp import WSMessage
 
@@ -26,7 +26,19 @@ class ServerEndpoint(BaseApiEndpoint):
     async def update_configuration(self, config: Mapping[str, Any]):
         await self._transport.put(self.URL_PATH, json=config)
 
-    async def get_events(self):
-        async with self._transport.session.ws_connect('/1.0/events') as ws:
+    async def get_events(
+        self,
+        project: Optional[str] = None,
+        type: Optional[str] = None
+    ):
+        params = {}
+        if project is not None:
+            params['project'] = project
+        if type is not None:
+            params['type'] = type
+
+        async with self._transport.session.ws_connect(
+            f'{self.URL_PATH}/events', params=params
+        ) as ws:
             async for msg in ws:  # type: WSMessage
                 yield Event.from_dict(msg.json())
