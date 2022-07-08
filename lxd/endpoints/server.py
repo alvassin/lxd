@@ -3,7 +3,7 @@ from typing import Any, Mapping, Optional
 from aiohttp import WSMessage
 
 from lxd.endpoints.base import BaseApiEndpoint
-from lxd.entities.server import Server, ServerResources, Event
+from lxd.entities.server import Event, Server, ServerResources
 
 
 class ServerEndpoint(BaseApiEndpoint):

@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, List, Mapping, Optional, Union, Dict
+from typing import Any, List, Mapping, Optional, Union
 
 from lxd.entities.base import BaseEntity
 from lxd.entities.operations import Operation
@@ -51,7 +51,7 @@ class Event(BaseEntity):
     location: str
     metadata: Union[LifecycleEvent, LoggingEvent, Operation]
     timestamp: datetime = field(metadata={
-        "deserialize": parse_datetime_with_nanoseconds
+        'deserialize': parse_datetime_with_nanoseconds
     })
     type: str
     project: Optional[str] = None

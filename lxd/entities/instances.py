@@ -68,10 +68,10 @@ class Instance(BaseInstance):
     expanded_devices: Mapping[str, Any]
     location: str
     created_at: datetime = field(metadata={
-        "deserialize": parse_datetime_with_nanoseconds
+        'deserialize': parse_datetime_with_nanoseconds
     })
     last_used_at: datetime = field(metadata={
-        "deserialize": parse_datetime_with_nanoseconds
+        'deserialize': parse_datetime_with_nanoseconds
     })
     backups: Optional[List[InstanceBackup]] = None
     snapshots: Optional[List[InstanceSnapshot]] = None

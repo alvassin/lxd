@@ -21,10 +21,10 @@ class Operation(BaseEntity):
     status: str
     status_code: int
     created_at: datetime = field(metadata={
-        "deserialize": parse_datetime_with_nanoseconds
+        'deserialize': parse_datetime_with_nanoseconds
     })
     updated_at: datetime = field(metadata={
-        "deserialize": parse_datetime_with_nanoseconds
+        'deserialize': parse_datetime_with_nanoseconds
     })
 
 
