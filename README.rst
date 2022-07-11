@@ -114,6 +114,17 @@ Update the entire `server configuration <https://linuxcontainers.org/lxd/docs/ma
     })
 
 
+You may need to send ``int`` values as ``str``, otherwise lxd would not be able to parse them:
+
+.. code-block:: python
+
+    await client.server.update_configuration({
+        # 2 (int) value would cause error:
+        # 'cannot set \'images.remote_cache_expiry\': invalid type float64'
+        'images.remote_cache_expiry': '2'
+    })
+
+
 server.update_configuration_subset
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Update a subset of the `server configuration <https://linuxcontainers.org/lxd/docs/master/server/>`_.
@@ -121,7 +132,18 @@ Update a subset of the `server configuration <https://linuxcontainers.org/lxd/do
 .. code-block:: python
 
     await client.server.update_configuration_subset({
-        'images.remote_cache_expiry': 2
+        'core.trust_password': 'very-strong-password'
+    })
+
+
+You may need to send ``int`` values as ``str``, otherwise lxd would not be able to parse them:
+
+.. code-block:: python
+
+    await client.server.update_configuration({
+        # 2 (int) value would cause error:
+        # 'cannot set \'images.remote_cache_expiry\': invalid type float64'
+        'images.remote_cache_expiry': '2'
     })
 
 

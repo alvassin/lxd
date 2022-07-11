@@ -28,16 +28,10 @@ class ServerEndpoint(BaseApiEndpoint):
         return ServerResources.from_dict(resp_content.metadata)
 
     async def update_configuration_subset(self, config: Mapping[str, Any]):
-        # Convert all values to string, otherwise server fails silently when
-        # sending integers or float
-        json = {'config': {k: str(v) for k, v in config.items()}}
-        await self._transport.patch(self.URL_PATH, json=json)
+        await self._transport.patch(self.URL_PATH, json={'config': config})
 
     async def update_configuration(self, config: Mapping[str, Any]):
-        # Convert all values to string, otherwise server fails silently when
-        # sending integers or float
-        json = {'config': {k: str(v) for k, v in config.items()}}
-        await self._transport.put(self.URL_PATH, json=json)
+        await self._transport.put(self.URL_PATH, json={'config': config})
 
     async def get_events(
         self,

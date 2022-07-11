@@ -1,11 +1,7 @@
-from http import HTTPStatus
-from typing import Mapping
-
-from aiohttp import ClientSession, hdrs
+from aiohttp import ClientResponseError, ClientSession, hdrs
 from aiohttp.typedefs import StrOrURL
 
 from lxd.entities.response import Response
-from lxd.exceptions import LxdApiForbidden, LxdApiNotFound
 
 
 class Transport:
@@ -16,12 +12,21 @@ class Transport:
     def session(self) -> ClientSession:
         return self._session
 
-    async def request(self, method: str, url: StrOrURL, **kwargs):
+    async def request(self, method: str, url: StrOrURL, **kwargs) -> Response:
         async with self._session.request(
             method, url, **kwargs, raise_for_status=False
         ) as resp:
-            raw_content = await resp.json()
-            return self._handle_response(resp.status, raw_content)
+            body = await resp.json()
+            if resp.ok:
+                return Response.from_dict(body)
+
+            raise ClientResponseError(
+                resp.request_info,
+                resp.history,
+                status=resp.status,
+                message=body.get('error', resp.reason),
+                headers=resp.headers,
+            )
 
     def head(self, url: StrOrURL, **kwargs):
         return self.request(hdrs.METH_HEAD, url, **kwargs)
@@ -40,12 +45,3 @@ class Transport:
 
     def delete(self, url: StrOrURL, **kwargs):
         return self.request(hdrs.METH_DELETE, url, **kwargs)
-
-    @staticmethod
-    def _handle_response(status: int, raw_content: Mapping):
-        content = Response.from_dict(raw_content)
-        if status == HTTPStatus.FORBIDDEN:
-            raise LxdApiForbidden(content.error_code, content.error)
-        elif status == HTTPStatus.NOT_FOUND:
-            raise LxdApiNotFound(content.error_code, content.error)
-        return content
