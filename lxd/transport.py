@@ -14,7 +14,6 @@ from lxd.entities.response import Response
 
 
 class LXDTransport:
-
     def __init__(
         self, *,
         endpoint_url: Optional[StrOrURL] = None,
@@ -24,6 +23,17 @@ class LXDTransport:
         session: Optional[ClientSession] = None,
         connector: Optional[BaseConnector] = None,
     ):
+        """Constructs transport for LXD client.
+        :param endpoint_url: endpoint can be an http endpoint or a path to a
+            unix socket.
+        :param cert_path: Path to client certificate to use for client
+            authentication.
+        :param key_path: Path to private key to use with client certificate for
+            client authentication.
+        :param session: Preconfigured aiohttp ClientSession object.
+        :param connector: Preconfigured aiohttp BaseConnector descendant
+            object.
+        """
         if session is not None and any((
             endpoint_url, cert_path, key_path, endpoint_cert_path, connector
         )):
@@ -45,7 +55,9 @@ class LXDTransport:
             self._session = session
             return
 
+        connector_owner = False
         if connector is None:
+            connector_owner = True
             if endpoint_url is None:
                 path = '/var/lib/lxd/unix.socket'
                 if 'LXD_DIR' in os.environ:
@@ -76,7 +88,8 @@ class LXDTransport:
         self._session = ClientSession(
             base_url=endpoint_url,
             connector=connector,
-            raise_for_status=True
+            connector_owner=connector_owner,
+            raise_for_status=True,
         )
         self._session_owner = True
 

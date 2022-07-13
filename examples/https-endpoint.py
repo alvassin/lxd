@@ -1,3 +1,6 @@
+"""
+This example can be used to list instances using https connection.
+"""
 import asyncio
 from argparse import ArgumentParser
 from pathlib import Path
