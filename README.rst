@@ -23,14 +23,12 @@ Initialize client
     import asyncio
     from pathlib import Path
 
-    from yarl import URL
-
     from lxd import make_client
 
 
     async def main():
         async with make_client(
-            URL('https://mylxd:8443/'),
+            'https://mylxd:8443/',
             cert_path=Path('~/.config/lxc/client.crt'),
             key_path=Path('~/.config/lxc/client.key'),
             endpoint_cert_path=Path('~/.config/lxc/servercerts/mylxd.crt'),
