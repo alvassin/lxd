@@ -1,9 +1,9 @@
-from .client import LXDClient, lxd_client
+from .client import LXDClient, make_client
 from .exceptions import LxdClientError
 
 
 __all__ = (
     'LXDClient',
     'LxdClientError',
-    'lxd_client'
+    'make_client'
 )

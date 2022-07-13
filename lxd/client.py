@@ -1,6 +1,7 @@
+from contextlib import asynccontextmanager
 from pathlib import Path
 from ssl import SSLContext
-from typing import Optional
+from typing import AsyncContextManager, Optional
 
 from aiohttp import ClientSession, TCPConnector
 from aiohttp.typedefs import StrOrURL
@@ -31,12 +32,13 @@ class LXDClient:
         await self.certificates.add(cert, password=password)
 
 
-def lxd_client(
+@asynccontextmanager
+async def make_client(
     endpoint_url: StrOrURL,
     cert_path: Path,
     key_path: Path,
     endpoint_cert_path: Optional[Path] = None
-) -> LXDClient:
+) -> AsyncContextManager[LXDClient]:
     ssl_ctx = SSLContext()
     if endpoint_cert_path:
         ssl_ctx.load_verify_locations(endpoint_cert_path.expanduser())
@@ -44,8 +46,9 @@ def lxd_client(
         str(cert_path.expanduser()), str(key_path.expanduser())
     )
 
-    connector = TCPConnector(ssl_context=ssl_ctx)
-    session = ClientSession(
-        base_url=endpoint_url, connector=connector, raise_for_status=True
-    )
-    return LXDClient(session=session)
+    async with ClientSession(
+        base_url=endpoint_url,
+        connector=TCPConnector(ssl_context=ssl_ctx),
+        raise_for_status=True
+    ) as session:
+        yield LXDClient(session=session)
