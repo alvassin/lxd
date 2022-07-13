@@ -2,3 +2,6 @@ gray
 pylama
 pytest
 twine
+sphinx-autobuild
+sphinx-intl
+sphinx>=3.5.1

@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from mashumaro import DataClassDictMixin
 
-from lxd.exceptions import LxdClientError
+from lxd.exceptions import LXDClientError
 
 
 class BaseEntity(DataClassDictMixin):
@@ -18,7 +18,7 @@ class EntityLink(ABC):
     @classmethod
     def parse_url_path(cls, url_path: str) -> str:
         if not url_path.startswith(cls.URL_PATH_PREFIX):
-            raise LxdClientError(f'Unvalid url path {url_path}')
+            raise LXDClientError(f'Unvalid url path {url_path}')
         return url_path[len(cls.URL_PATH_PREFIX):]
 
     @classmethod

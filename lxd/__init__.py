@@ -1,9 +1,10 @@
-from .client import LXDClient, make_client
-from .exceptions import LxdClientError
+from .client import LXDClient
+from .exceptions import LXDClientError
+from .transport import LXDTransport
 
 
 __all__ = (
     'LXDClient',
-    'LxdClientError',
-    'make_client'
+    'LXDClientError',
+    'LXDTransport'
 )

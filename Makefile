@@ -32,6 +32,7 @@ devenv: clean
 
 lint:
 	pylama .
+	unify --quote "'" --check-only --recursive *.py $(PROJECT_NAME) tests
 
 codestyle:
-	gray *.py lxd tests
+	gray *.py lxd examples tests
