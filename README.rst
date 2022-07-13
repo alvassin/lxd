@@ -25,21 +25,20 @@ Initialize client
 
     from yarl import URL
 
-    from lxd.client import lxd_client
+    from lxd import make_client
 
 
     async def main():
-        client = lxd_client(
+        async with make_client(
             URL('https://mylxd:8443/'),
             cert_path=Path('~/.config/lxc/client.crt'),
             key_path=Path('~/.config/lxc/client.key'),
             endpoint_cert_path=Path('~/.config/lxc/servercerts/mylxd.crt'),
-        )
-
-        await client.authenticate(
-            cert_path=Path('~/.config/lxc/client.crt'),
-            password='your-trust-password'
-        )
+        ) as client:
+            await client.authenticate(
+                cert_path=Path('~/.config/lxc/client.crt'),
+                password='your-trust-password'
+            )
 
 
     asyncio.run(main())
