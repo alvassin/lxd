@@ -23,16 +23,17 @@ Initialize client
     import asyncio
     from pathlib import Path
 
-    from lxd import make_client
+    from lxd import LXDTransport, LXDClient
 
 
     async def main():
-        async with make_client(
-            'https://mylxd:8443/',
+        async with LXDTransport(
+            endpoint_url='https://mylxd:8443/',
             cert_path=Path('~/.config/lxc/client.crt'),
             key_path=Path('~/.config/lxc/client.key'),
             endpoint_cert_path=Path('~/.config/lxc/servercerts/mylxd.crt'),
-        ) as client:
+        ) as transport:
+            client = LXDClient(transport)
             await client.authenticate(
                 cert_path=Path('~/.config/lxc/client.crt'),
                 password='your-trust-password'
